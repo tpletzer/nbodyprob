@@ -1,10 +1,11 @@
 tspan = [0, 10*pi];
 m1 = 1;
 m2 = 100;
+n = 10000;
 
 %loop        [x1, y1, x2, y2, vx1, vy1, vx2, vy2]
-init_cond2 = [1,  0,  0,  0,   50,   75,   -0.5,   -0.75;
-              %1, 0,  0,  0,   0,  10,  0,   0;
+init_cond2 = [1,  0,  0,  0,   0,   10,   0,   0;
+              %1, 0,  0,  0,   0,  0.9,  0,   0;
               %1, 0,  0,  0,   0,  1.1,  0,   0;
                 ];
 cols1 = ['b-', 'k.', 'm--', 'r-'
@@ -12,10 +13,9 @@ cols1 = ['b-', 'k.', 'm--', 'r-'
 cols2 = ['r-', 'm-'];
 ninit = size(init_cond2, 1);
 hold off
-opts = odeset('Reltol',1e-13,'AbsTol',1e-19);
 for init2 = 1:ninit
     sol0 = init_cond2(init2,:);
-    [t,sol] = ode113(@(t,y) twomass(t,y,m1,m2), tspan, sol0,opts);
+    [t,sol] = LeapFrog2(@(t,y) twomass(t,y,m1,m2), tspan, sol0,n);
     %plotting mass 1
    figure(1) 
    plot(sol(:,1),sol(:,2), cols1(init2));
@@ -27,14 +27,14 @@ for init2 = 1:ninit
    energies = energy(sol, 1, 100);
    plot(t, energies, cols1(init2));
    hold on
-   plot([t(1), t(end)], [energies(1), energies(1)], 'r-');
+   plot([t(1), t(end)], [energies(1), energies(1)], 'k--');
 
    figure(3) 
-   lms = px(sol, 1, 100);
-   plot(t, lms, cols1(init2));
+   lmxs = px(sol, 1, 100);
+   plot(t, lmxs, cols1(init2));
    hold on
-   plot([t(1), t(end)], [lms(1), lms(1)], 'r--');
-
+   plot([t(1), t(end)], [lmxs(1), lmxs(1)], 'r--');
+    
    figure(4)
    lmys = py(sol, 1, 100);
    plot(t, lmys, cols1(init2));

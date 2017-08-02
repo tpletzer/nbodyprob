@@ -1,3 +1,5 @@
+% n is the number of euler steps
+n = 10000;
 tspan = [0, 10*pi];
 m1 = 1;
 m2 = 100;
@@ -12,10 +14,9 @@ cols1 = ['b-', 'k.', 'm--', 'r-'
 cols2 = ['r-', 'm-'];
 ninit = size(init_cond2, 1);
 hold off
-opts = odeset('Reltol',1e-13,'AbsTol',1e-19);
 for init2 = 1:ninit
     sol0 = init_cond2(init2,:);
-    [t,sol] = ode113(@(t,y) twomass(t,y,m1,m2), tspan, sol0,opts);
+    [t,sol] = euler2(@(t,y) twomass(t,y,m1,m2), tspan, sol0,n);
     %plotting mass 1
    figure(1) 
    plot(sol(:,1),sol(:,2), cols1(init2));
@@ -23,13 +24,13 @@ for init2 = 1:ninit
     %plotting mass 2
     plot(sol(:,3),sol(:,4), cols2(init2),'LineWidth',4);
 
-   figure(2) 
-   energies = energy(sol, 1, 100);
-   plot(t, energies, cols1(init2));
-   hold on
-   plot([t(1), t(end)], [energies(1), energies(1)], 'r-');
+    figure(2) 
+    energies = energy(sol, 1, 100);
+    plot(t, energies, cols1(init2));
+    hold on
+    plot([t(1), t(end)], [energies(1), energies(1)], 'k--');
 
-   figure(3) 
+    figure(3) 
    lms = px(sol, 1, 100);
    plot(t, lms, cols1(init2));
    hold on

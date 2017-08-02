@@ -1,4 +1,4 @@
-function et = energy(y)
+function et = energy(y, m1, m2)
     %kinetic energy
     % [x1, y1, x2, y2, vx1, vy1, vx2, vy2]
     x1 = y(:, 1);
@@ -10,8 +10,6 @@ function et = energy(y)
     vx2 = y(:, 7);
     vy2 = y(:, 8);
 
-    m1 = 1;
-    m2 = 100;
     r12 = sqrt((x2-x1).^2 + (y2-y1).^2);
 
     ek = (m1*(vx1.^2 + vy1.^2) + m2*(vx2.^2 + vy2.^2))/2;
