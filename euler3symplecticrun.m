@@ -6,7 +6,7 @@ m3 = 1;
 sol0 = [0.97000436, -0.24308753, -0.97000436, 0.24308753, 0, 0,... 
         0.466203685, 0.43236573, 0.466203685, 0.43236573, -0.93240737, -0.86473146];
 
-[t,sol] = LeapFrog2(@(t,y) threemass(t, y, m1, m2, m3), tspan, sol0, n);
+[t,sol] = euler3(@(t,y) threemass(t, y, m1, m2, m3), tspan, sol0, n);
 hold on
 figure(1)
 plot(sol(:,1),sol(:,2), 'm-');
@@ -37,6 +37,11 @@ figure(4)
    plot(t, ams, cols1(init2));
    hold on
    plot([t(1), t(end)], [ams(1), ams(1)], 'r--');
+%figure(6) 
+   %energies = energy3(sol, 1, 1, 1);
+   %plot(t, energies, cols1(init2));
+   %hold on
+   %plot([t(1), t(end)], [energies(1), energies(1)], 'k--');
 
 %figure(2)
 %hold on
@@ -53,7 +58,7 @@ figure(4)
 %end
 %hold off
 figure(2) 
-title('Testing conservation of energy')
+title('Testing conservation of energy (relative)')
 xlabel('time')
 ylabel('\Delta E')
 hold off

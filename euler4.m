@@ -1,7 +1,8 @@
-% symplectic euler integrator
+% symolectic euler integrator with variable timestep
 % sol0 are the initial conditions
-function [t,sol] = euler3(dydt, tspan, sol0,n)
-dt = (tspan(2)-tspan(1))/n; 
+function [t,sol] = euler4(dydt, tspan, sol0, n, tol)
+dtinput = (tspan(2)-tspan(1))/n;
+dt = dtinput;
 sol = zeros(n+1, size(sol0,2));
 sol(1,:) = sol0;
 t = linspace(tspan(1), tspan(2), n+1);
@@ -15,7 +16,10 @@ for i = 1:n
  yprime = dydt(t(i), sol(i,:));
  %isolates the acceleration at time i from tendencies
  acc = transpose(yprime(n2+1:2*n2));
- %diff = abs(vel - (vel + acc*dt))
+ diffvel = max(abs(acc*dt));
+dtmax = 0.9*(2*tol)/diffvel;
+%0.9 is just to guarantee its a bit smaller
+dt = min(dtinput, dtmax);
 % velocity  i+1
     vel = vel + acc*dt;
 % update pos for i+1 using vel(i+1)

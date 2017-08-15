@@ -1,12 +1,14 @@
+%Leapfrog with variable timestep
 tspan = [0, 213];
+tol = 0.01;
 n = 42600;
 m1 = 1;
-m2 = 1; 
+m2 = 1;  
 m3 = 1;
 sol0 = [0.97000436, -0.24308753, -0.97000436, 0.24308753, 0, 0,... 
         0.466203685, 0.43236573, 0.466203685, 0.43236573, -0.93240737, -0.86473146];
 
-[t,sol] = LeapFrog2(@(t,y) threemass(t, y, m1, m2, m3), tspan, sol0, n);
+[t,sol] = LeapFrog4(@(t,y) threemass(t, y, m1, m2, m3), tspan, sol0, n, tol);
 hold on
 figure(1)
 plot(sol(:,1),sol(:,2), 'm-');
